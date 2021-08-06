@@ -16,9 +16,9 @@ A script for batch-downloading data from NCBI Sequence Read Archive built on SRA
 
 # Output
 |-- save_folder  
-&nbsp;|-- SraRunTable.txt         - original SraRunTable.txt with useful metadata about samples  
-&nbsp;|-- absent.txt              - entries that were unaccessible due to various reasons  
-&nbsp;|-- .fastq.gz               - raw read files from SRA  
+&emsp;&emsp;|-- SraRunTable.txt - original SraRunTable.txt with useful metadata about samples  
+&emsp;&emsp;|-- absent.txt - entries that were unaccessible due to various reasons  
+&emsp;&emsp;|-- .fastq.gz - raw read archived files from SRA  
 
 # Multiple study download
 1. Copy a folder with configured download.py
