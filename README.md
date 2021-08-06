@@ -14,6 +14,12 @@ A script for batch-downloading data from NCBI Sequence Read Archive built on SRA
 3. Replace **SraRunTable.txt** with **SraRunTable.txt** from desired study (available as "Metadata" file from SRA Run Selector)
 4. Run download.py
 
+# Output
+|-- save_folder
+    |-- SraRunTable.txt         - original SraRunTable.txt with useful metadata about samples
+    |-- absent.txt              - entries that were unaccessible due to various reasons
+    |-- .fastq.gz               - files from SRA
+
 # Multiple study download
 1. Copy a folder with configured download.py
 2. Replace **SraRunTable.txt** with **SraRunTable.txt** from desired study
