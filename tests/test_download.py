@@ -51,17 +51,17 @@ def test_from_file():
     assert _same_dirs(save_folder, "./tests/expected")
     os.system(f"rm -rf {save_folder}")
 
-# def test_compression():
-#     save_folder = "./tests/downloaded"
+def test_compression():
+    save_folder = "./tests/downloaded"
 
-#     metadata = pd.read_csv('./tests/SraRunTable.txt')
+    metadata = pd.read_csv('./tests/SraRunTable.txt')
     
-#     study_stats = download_reads(metadata, save_folder, True)
-#     for study_name, n_samples in study_stats.items():
-#         tmp_save_folder = f'{save_folder}/{study_name}'
-#         copy2('./tests/SraRunTable.txt', f'{tmp_save_folder}')
+    study_stats = download_reads(metadata, save_folder, True)
+    for study_name, n_samples in study_stats.items():
+        tmp_save_folder = f'{save_folder}/{study_name}'
+        copy2('./tests/SraRunTable.txt', f'{tmp_save_folder}')
     
-#     os.system(f"rm -rf {save_folder}")
+    os.system(f"rm -rf {save_folder}")
 
 def test_single():
     save_folder = "./tests/downloaded/ERR1551967"
