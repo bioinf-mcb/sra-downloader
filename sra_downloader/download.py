@@ -18,6 +18,10 @@ def _load_log(filepath):
         log = {}
     return log
 
+def _find_processed(directory):
+    processed = glob.glob(f"{directory}/*.sr*.fast*")
+    processed = [os.path.split(i)[-1].split(".")[0] for i in processed]
+    return processed
 
 def _load_absent(filepath):
     """ Opens or creates DataFrame with absent files"""
@@ -58,8 +62,9 @@ def download_accession(accession, save_folder="./downloaded", compress=True):
 
     os.remove(fname + '.sra')
     if compress:
-        compress = 'pigz ' + os.path.join(folder, os.path.join(save_folder, accession+".fastq"))
-        _call(compress)
+        for fname in glob.glob(f"{save_folder}/{accession}*.fastq"):
+            compress = 'pigz ' + fname
+            _call(compress)
 
 
 def download_reads(metadata, save_folder, compress=True, skip_absent=True):
@@ -82,8 +87,9 @@ def download_reads(metadata, save_folder, compress=True, skip_absent=True):
 
     for study_name, accessions in metadata.items():
         study_save_folder = os.path.join(save_folder, study_name)
-        processed = glob.glob(f"{study_save_folder}/*.sr*.fast*")
-        processed = [os.path.split(i)[-1].split(".")[0] for i in processed]
+        # processed = glob.glob(f"{study_save_folder}/*.sr*.fast*")
+        # processed = [os.path.split(i)[-1].split(".")[0] for i in processed]
+        processed = _find_processed(study_save_folder)
 
         try:
             absent = _load_absent(os.path.join(study_save_folder, "absent.txt"))
