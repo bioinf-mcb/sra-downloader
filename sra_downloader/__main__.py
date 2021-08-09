@@ -1,4 +1,4 @@
-from download import download_accession, download_reads, _find_processed
+from .download import download_accession, download_reads, _find_processed
 import argparse
 import glob
 from collections import defaultdict
@@ -14,7 +14,7 @@ def str2bool(v):
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
-if __name__=="__main__":
+def main():
     parser = argparse.ArgumentParser(description='Download SRA data')
     parser.add_argument('accessions', metavar='sra_id', type=str, nargs='*', default=[],
                         help='an SRA IDs to download')
@@ -41,3 +41,6 @@ if __name__=="__main__":
             for row in reader:
                 metadata[row[1]].append(row[0])
         download_reads(metadata, args.save_directory, not args.uncompressed)
+
+if __name__=="__main__":
+    main()
