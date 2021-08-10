@@ -1,10 +1,11 @@
-from .download import download_accession, download_reads, _find_processed
+from .download import download_accession, download_reads, _find_processed, _read_file
 import argparse
 import glob
 from collections import defaultdict
 import csv
 
 def str2bool(v):
+    print(v)
     if isinstance(v, bool):
         return v
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -15,16 +16,20 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 def main():
-    parser = argparse.ArgumentParser(description='Download SRA data')
+    parser = argparse.ArgumentParser(description='Download SRA data and organize them by projects')
     parser.add_argument('accessions', metavar='sra_id', type=str, nargs='*', default=[],
-                        help='an SRA IDs to download')
+                        help='SRA IDs to download')
     parser.add_argument('--fname', dest='filename', default=None, type=str,
-                        help='CSV file with list of SRAs to download. Format: `sra_id,project_name`')
+                        help='CSV file with list of SRAs to download. Header must include `Run` and `BioProject`.')
     parser.add_argument('--save-dir', dest='save_directory', default='./downloaded', type=str,
                     help='a directory that the files will be saved to. (default: ./downloaded)')
-    parser.add_argument('--uncompressed', type=str2bool, nargs="?", help="if present, the files will not be compressed. (default: False)", default=False)
+    parser.add_argument('--uncompressed', type=str2bool, nargs="?", help="if present, the files will not be compressed. (default: False)", default=False, const=True)
 
     args = parser.parse_args()
+    if args.filename is None and len(args.accessions)==0:
+        parser.print_help()
+        return
+
     processed = _find_processed(args.save_directory)
     for sra_id in args.accessions:
         print("Processing:", sra_id)
@@ -33,13 +38,8 @@ def main():
             continue
         download_accession(sra_id, args.save_directory, not args.uncompressed)
 
-    metadata = defaultdict(list)
     if args.filename is not None:
-        with open(args.filename, "r") as f:
-            reader = csv.reader(f)
-            next(reader)
-            for row in reader:
-                metadata[row[1]].append(row[0])
+        metadata = _read_file(args.filename)
         download_reads(metadata, args.save_directory, not args.uncompressed)
 
 if __name__=="__main__":

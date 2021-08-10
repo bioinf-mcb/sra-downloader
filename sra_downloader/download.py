@@ -5,6 +5,9 @@ import json
 import subprocess, shlex
 import logging
 import glob
+from collections import defaultdict
+import csv
+
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 logger = logging.getLogger('SRA-downloader')
 
@@ -123,6 +126,20 @@ def download_reads(metadata, save_folder, compress=True, skip_absent=True):
 
     return study_stats
 
+def _read_file(fname):
+    def __find_index(list, name):
+        return [i for i in range(len(header)) if list[i]==name][0]
+
+    metadata = defaultdict(list)
+    with open(fname, "r") as f:
+        reader = csv.reader(f)
+        header = next(reader)
+        project_idx = __find_index(header, "BioProject")
+        run_idx = __find_index(header, "Run")
+
+        for row in reader:
+            metadata[row[project_idx]].append(row[run_idx])
+    return metadata
 
 if __name__ == "__main__":  
     # Change this to your download location

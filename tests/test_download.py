@@ -1,4 +1,4 @@
-from sra_downloader.download import download_reads, download_accession
+from sra_downloader.download import download_reads, download_accession, _read_file
 from shutil import copy2
 import filecmp
 import os
@@ -69,5 +69,18 @@ def test_single():
     assert _same_dirs(save_folder, "./tests/expected_single/ERR1551967")
     os.system(f"rm -rf {save_folder}")
 
+def test_parse():
+    with open("tmp.csv", "w") as f:
+        f.write("Run,BioProject\n")
+        f.write("a,b\n")
+    data = _read_file("tmp.csv")
+    assert dict(data) == {'b': ['a']}
+
+    with open("tmp.csv", "w") as f:
+        f.write("Run,Assay Type,AvgSpotLen,Bases,BioProject,BioSample,BioSampleModel,Bytes,Center Name,collected_by,Consent,DATASTORE filetype,DATASTORE provider,DATASTORE region,Experiment,geo_loc_name_country,geo_loc_name_country_continent,geo_loc_name,host_disease,Host,Instrument,isolation_source,lat_lon,Library Name,LibraryLayout,LibrarySelection,LibrarySource,Organism,Platform,ReleaseDate,Sample Name,SRA Study,Strain,note,sub_species,note2,Tax_ID,collection_date\n")
+        f.write('SRR1655192,WGS,187,97029754,PRJNA267549,SAMN03196960,Pathogen.cl,70061188,UNIVERSITY OF WASHINGTON,UW clinical laboratory,public,"fastq,sra","gs,ncbi,s3","gs.US,ncbi.public,s3.us-east-1",SRX761658,USA,North America,USA: WA,missing,Homo sapiens,Illumina HiSeq 2000,missing,missing,10_ECLO,PAIRED,RANDOM,GENOMIC,Enterobacter cloacae,ILLUMINA,2015-07-07T00:00:00Z,10_ECLO,SRP049998,10_ECLO,,,,,\n')
+    data = _read_file("tmp.csv")
+    assert dict(data) == {'PRJNA267549': ['SRR1655192']}
+    
 if __name__=="__main__":
-    test_from_file()
+    test_parse()
