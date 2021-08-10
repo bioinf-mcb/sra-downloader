@@ -12,10 +12,13 @@ Features:
 - pigz 
 
 ## Instalation
-### 1. From PyPi
+### 1. Conda (recommended, also downloads sra-toolkit)
+1. Run `conda install -c bioinf-mcb sra-downloader`
+
+### 2. From PyPi
 1. Run `pip install sra-downloader`
 
-### 2. From sources
+### 3. From sources
 1. Download a repo into a folder
 2. Run `pip install .`
 
