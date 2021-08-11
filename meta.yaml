@@ -1,0 +1,43 @@
+{% set name = "sra-downloader" %}
+{% set version = "1.0" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
+  sha256: 6f02540a15b425e043baa8e79df45c38d19fd1f04bf094e3cfdd8eaf4186eb92
+
+build:
+  number: 0
+  entry_points:
+    - sra-downloader=sra_downloader.__main__:main
+  script: "{{ PYTHON }} -m pip install . -vv"
+
+requirements:
+  host:
+    - pip
+    - python
+  run:
+    - python
+    - sra-tools >=2.9.6
+
+test:
+  imports:
+    - sra_downloader
+  commands:
+    - sra-downloader --help
+
+about:
+  home: "https://github.com/bioinf-mcb/sra-downloader"
+  license: MIT
+  license_family: MIT
+  license_file: 
+  summary: "A script for batch-downloading and automatic compression of data from NCBI Sequence Read Archive. Built on SRA-Toolkit."
+  doc_url: 
+  dev_url: 
+
+extra:
+  recipe-maintainers:
+    - wwydmanski
