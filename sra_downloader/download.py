@@ -22,7 +22,7 @@ def _load_log(filepath):
     return log
 
 def _find_processed(directory):
-    processed = glob.glob(f"{directory}/*.sr*.fast*")
+    processed = glob.glob("{0}/*.sr*.fast*".format(directory))
     processed = [os.path.split(i)[-1].split(".")[0] for i in processed]
     return processed
 
@@ -54,18 +54,18 @@ def download_accession(accession, save_folder="./downloaded", compress=True):
     prefetch = "prefetch --max-size 100G " + accession + " -o " + fname + ".sra"
     results = _call(prefetch)
     if "no data" in str(results.stderr):
-        logger.error(f"Accession {accession} not found")
+        logger.error("Accession {0} not found".format(accession))
         raise FileNotFoundError
 
-    fasterq_dump = f"fasterq-dump {fname}.sra -O {save_folder}"
+    fasterq_dump = "fasterq-dump {0}.sra -O {1}".format(fname, save_folder)
     res = _call(fasterq_dump)
     if 'invalid accession' in res.stderr.decode():
-        logger.warning(f'Accession {accession} not found')
+        logger.warning('Accession {0} not found'.format(accession))
         raise FileNotFoundError 
 
     os.remove(fname + '.sra')
     if compress:
-        for fname in glob.glob(f"{save_folder}/{accession}*.fastq"):
+        for fname in glob.glob("{0}/{1}*.fastq".format(save_folder, accession)):
             compress = 'pigz ' + fname
             _call(compress)
 
@@ -102,7 +102,7 @@ def download_reads(metadata, save_folder, compress=True, skip_absent=True):
         for sra_id in accessions:
             fname = os.path.join(save_folder, sra_id)
 
-            logger.info("Currently processing: " + sra_id + f" ({processed_no}/{len(all_accessions)})")
+            logger.info("Currently processing: " + sra_id + " ({0}/{1})".format(processed_no, len(all_accessions)))
             processed_no += 1
 
             if sra_id in processed:
@@ -114,7 +114,7 @@ def download_reads(metadata, save_folder, compress=True, skip_absent=True):
                     continue
 
             try:
-                download_accession(sra_id, f'{save_folder}/{study_name}', compress)
+                download_accession(sra_id, '{0}/{1}'.format(save_folder, study_name), compress)
             except FileNotFoundError:
                 with open(os.path.join(study_save_folder, "absent.txt"), "a") as f:
                     f.write(sra_id+"\n")
@@ -153,10 +153,6 @@ if __name__ == "__main__":
 
     # Adding final output
     for study_name, n_samples in study_stats.items():
-        tmp_save_folder = f'{save_folder}/{study_name}'
-        copy2('SraRunTable.txt', f'{tmp_save_folder}')
-        logger.info(f'{n_samples} sample from {study_name} downloaded')
-    # if len(metadata) == len(log) + len(absent):
-    #     os.remove('SraRunTable.txt')
-    #     copy2('absent.txt', f'{save_folder}')
-    #     os.remove('absent.txt')
+        tmp_save_folder = '{0}/{1}'.format(save_folder, study_name)
+        copy2('SraRunTable.txt', tmp_save_folder)
+        logger.info('{0} sample from {1} downloaded'.format(n_samples, study_name))

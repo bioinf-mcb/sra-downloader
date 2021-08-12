@@ -1,0 +1,2 @@
+/var/opt/miniconda3/lib/python3.8/site-packages/sra_downloader-1.0-py3.8.egg
+/var/opt/miniconda3/bin/sra-downloader
