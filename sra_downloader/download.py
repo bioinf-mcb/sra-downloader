@@ -40,7 +40,7 @@ def _call(command):
         logger.error(res.stderr.decode())
     return res
 
-def download_accession(accession, save_folder="./downloaded", compress=True):
+def download_accession(accession, cores, save_folder="./downloaded", compress=True):
     """ Downloads a single accession file to the target directory
     
     Args:
@@ -66,11 +66,14 @@ def download_accession(accession, save_folder="./downloaded", compress=True):
     os.remove(fname + '.sra')
     if compress:
         for fname in glob.glob("{0}/{1}*.fastq".format(save_folder, accession)):
-            compress = 'pigz ' + fname
+            compress = 'pigz '
+            if cores is not None:
+                compress += ' -p ' + str(cores)
+            compress += ' ' + fname
             _call(compress)
 
 
-def download_reads(metadata, save_folder, compress=True, skip_absent=True):
+def download_reads(metadata, save_folder, cores, compress=True, skip_absent=True):
     """ Downloads a list of accessions and puts them into project directories.
     
     Args:
@@ -90,8 +93,6 @@ def download_reads(metadata, save_folder, compress=True, skip_absent=True):
 
     for study_name, accessions in metadata.items():
         study_save_folder = os.path.join(save_folder, study_name)
-        # processed = glob.glob(f"{study_save_folder}/*.sr*.fast*")
-        # processed = [os.path.split(i)[-1].split(".")[0] for i in processed]
         processed = _find_processed(study_save_folder)
 
         try:
@@ -114,7 +115,7 @@ def download_reads(metadata, save_folder, compress=True, skip_absent=True):
                     continue
 
             try:
-                download_accession(sra_id, '{0}/{1}'.format(save_folder, study_name), compress)
+                download_accession(sra_id, cores, '{0}/{1}'.format(save_folder, study_name), compress)
             except FileNotFoundError:
                 with open(os.path.join(study_save_folder, "absent.txt"), "a") as f:
                     f.write(sra_id+"\n")
