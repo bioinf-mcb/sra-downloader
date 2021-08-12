@@ -24,9 +24,10 @@ def main():
     parser.add_argument('--save-dir', dest='save_directory', default='./downloaded', type=str,
                     help='a directory that the files will be saved to. (default: ./downloaded)')
     parser.add_argument('--uncompressed', type=str2bool, nargs="?", help="if present, the files will not be compressed. (default: False)", default=False, const=True)
-    parser.add_argument('--cores', type=int, nargs="?", help="Cores used for compression. (default is the number of online processors, or 8 if unknown)", default=False, const=True)
+    parser.add_argument('--cores', type=int, nargs="?", help="Cores used for compression. (default is the number of online processors, or 8 if unknown)", default=None, const=True)
 
     args = parser.parse_args()
+    print(args)
     if args.filename is None and len(args.accessions)==0:
         parser.print_help()
         return

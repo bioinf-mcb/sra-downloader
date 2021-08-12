@@ -49,6 +49,7 @@ optional arguments:
 ### Examples
 ```
 sra-downloader ERR2177760 --uncompressed
+docker run -v $(pwd)/downloads:/downloaded wwydmanski/sra-downloader ERR1551967
 sra-downloader --fname SraRunTable.txt --save-dir ./SRAs --cores 4
 ```
 
