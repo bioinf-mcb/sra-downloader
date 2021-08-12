@@ -12,6 +12,9 @@ Features:
 - pigz 
 
 ## Instalation
+### 0. Docker
+1. Run `docker run wwydmanski/sra-downloader -h`
+
 ### 1. Conda (recommended, also downloads sra-toolkit)
 1. Run `conda install -c bioconda -c bioinf-mcb sra-downloader` 
 
