@@ -7,6 +7,7 @@ import logging
 import glob
 from collections import defaultdict
 import csv
+from pathlib import Path
 
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 logger = logging.getLogger('SRA-downloader')
@@ -73,7 +74,7 @@ def download_accession(accession, cores, save_folder="./downloaded", compress=Tr
             _call(compress)
 
 
-def download_reads(metadata, save_folder, cores, compress=True, skip_absent=True):
+def download_reads(metadata, cores, save_folder, compress=True, skip_absent=True):
     """ Downloads a list of accessions and puts them into project directories.
     
     Args:
@@ -117,6 +118,8 @@ def download_reads(metadata, save_folder, cores, compress=True, skip_absent=True
             try:
                 download_accession(sra_id, cores, '{0}/{1}'.format(save_folder, study_name), compress)
             except FileNotFoundError:
+                Path(study_save_folder).mkdir(parents=True, exist_ok=True)
+
                 with open(os.path.join(study_save_folder, "absent.txt"), "a") as f:
                     f.write(sra_id+"\n")
 

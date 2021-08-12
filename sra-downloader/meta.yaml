@@ -1,5 +1,5 @@
 {% set name = "sra-downloader" %}
-{% set version = "1.0.4" %}
+{% set version = "1.0.6" %}
 {% set data = load_setup_py_data() %}
 
 package:
@@ -7,8 +7,7 @@ package:
   version: "{{ version }}"
 
 source:
-  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
-  sha256: ae32385888f590ec46cbb2d3dec9e74aa0b3f611d3e1b6b7850ac51e623c392e
+  url: "https://files.pythonhosted.org/packages/b2/bd/3f9c3992c79dc58652f850a4b92a5ca02c8a7662ed7eb5d9dca8b38c26ab/sra-downloader-1.0.6.tar.gz"
 
 build:
   number: 0
@@ -38,7 +37,7 @@ about:
   summary: "A script for batch-downloading and automatic compression of data from NCBI Sequence Read Archive. Built on SRA-Toolkit."
   doc_url: 
   dev_url: 
-  description: {{ data.get('long_description') }}
+  description: {{ data.get('description') }}
 
 extra:
   recipe-maintainers:
