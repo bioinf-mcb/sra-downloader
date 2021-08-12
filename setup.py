@@ -5,7 +5,7 @@ HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 setup(name='sra-downloader',
-        version='1.0.1',
+        version='1.0.4',
         description='A script for batch-downloading and automatic compression of data from NCBI Sequence Read Archive. Built on SRA-Toolkit.',
         long_description=README,
         long_description_content_type="text/markdown",

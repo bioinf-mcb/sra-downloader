@@ -24,6 +24,7 @@ def main():
     parser.add_argument('--save-dir', dest='save_directory', default='./downloaded', type=str,
                     help='a directory that the files will be saved to. (default: ./downloaded)')
     parser.add_argument('--uncompressed', type=str2bool, nargs="?", help="if present, the files will not be compressed. (default: False)", default=False, const=True)
+    parser.add_argument('--cores', type=int, nargs="?", help="Cores used for compression. (default is the number of online processors, or 8 if unknown)", default=False, const=True)
 
     args = parser.parse_args()
     if args.filename is None and len(args.accessions)==0:
@@ -36,11 +37,11 @@ def main():
         if sra_id in processed:
             print("Already processed, skipping.")
             continue
-        download_accession(sra_id, args.save_directory, not args.uncompressed)
+        download_accession(sra_id, args.cores, args.save_directory, not args.uncompressed)
 
     if args.filename is not None:
         metadata = _read_file(args.filename)
-        download_reads(metadata, args.save_directory, not args.uncompressed)
+        download_reads(metadata, args.cores, args.save_directory, not args.uncompressed)
 
 if __name__=="__main__":
     main()

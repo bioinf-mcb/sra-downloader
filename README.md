@@ -13,7 +13,9 @@ Features:
 
 ## Instalation
 ### 1. Conda (recommended, also downloads sra-toolkit)
-1. Run `conda install -c bioinf-mcb sra-downloader`
+1. Run `conda install -c bioconda -c bioinf-mcb sra-downloader` 
+
+Note: if you don't specify the `bioconda` channel you will get a dependency error.
 
 ### 2. From PyPi
 1. Run `pip install sra-downloader`
@@ -24,9 +26,9 @@ Features:
 
 ## Usage
 ```
-usage: sra-downloader [-h] [--fname FILENAME] [--save-dir SAVE_DIRECTORY] [--uncompressed [UNCOMPRESSED]] [sra_id [sra_id ...]]
+usage: sra-downloader [-h] [--fname FILENAME] [--save-dir SAVE_DIRECTORY] [--uncompressed [UNCOMPRESSED]] [--cores [CORES]] [sra_id [sra_id ...]]
 
-Download SRA data
+Download SRA data and organize them by projects
 
 positional arguments:
   sra_id                SRA IDs to download
@@ -38,19 +40,16 @@ optional arguments:
                         a directory that the files will be saved to. (default: ./downloaded)
   --uncompressed [UNCOMPRESSED]
                         if present, the files will not be compressed. (default: False)
+  --cores [CORES]       Cores used for compression. (default is the number of online processors, or 8 if unknown)
 ```
 
 ### Examples
 ```
 sra-downloader ERR2177760 --uncompressed
-sra-downloader --fname SraRunTable.txt --save-dir ./SRAs
+sra-downloader --fname SraRunTable.txt --save-dir ./SRAs --cores 4
 ```
 
 ## Sample output
-<!-- |-- save_folder  
-&emsp;&emsp;|-- SraRunTable.txt - original SraRunTable.txt with useful metadata about samples  
-&emsp;&emsp;|-- absent.txt - entries that were unaccessible due to various reasons  
-&emsp;&emsp;|-- .fastq.gz - raw read archived files from SRA   -->
 
 ```
 └─── save_folder
