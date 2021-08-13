@@ -141,8 +141,13 @@ def _read_file(fname):
         project_idx = __find_index(header, "BioProject")
         run_idx = __find_index(header, "Run")
 
-        for row in reader:
-            metadata[row[project_idx]].append(row[run_idx])
+        try:
+            for row in reader:
+                metadata[row[project_idx]].append(row[run_idx])
+        # workaround for empty line in the file 
+        except IndexError:
+            pass
+
     return metadata
 
 if __name__ == "__main__":  
