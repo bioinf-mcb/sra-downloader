@@ -58,7 +58,7 @@ def test_from_file():
         copy2('./tests/SraRunTable.txt', f'{tmp_save_folder}')
 
     assert _same_dirs(save_folder, "./tests/expected")
-    # os.system(f"rm -rf {save_folder}")
+    os.system(f"rm -rf {save_folder}")
 
 
 def test_compression():
