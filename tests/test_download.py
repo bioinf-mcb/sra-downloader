@@ -5,6 +5,7 @@ import os
 import csv
 from collections import defaultdict
 
+
 def _same_dirs(a, b):
     """Check that structure and files are the same for directories a and b
 
@@ -32,6 +33,14 @@ def _same_dirs(a, b):
         right_subdir = os.path.join(b, subdir)
         return _same_dirs(left_subdir, right_subdir)
     return True 
+   
+    
+def test_single():
+    save_folder = "./tests/downloaded/ERR1551967"
+    download_accession("ERR1551967", 1, save_folder, False)
+    assert _same_dirs(save_folder, "./tests/expected_single/ERR1551967")
+    os.system(f"rm -rf {save_folder}")
+
 
 def test_from_file():
     save_folder = "./tests/downloaded"
@@ -49,7 +58,8 @@ def test_from_file():
         copy2('./tests/SraRunTable.txt', f'{tmp_save_folder}')
 
     assert _same_dirs(save_folder, "./tests/expected")
-    os.system(f"rm -rf {save_folder}")
+    # os.system(f"rm -rf {save_folder}")
+
 
 def test_compression():
     save_folder = "./tests/downloaded"
@@ -67,11 +77,6 @@ def test_compression():
     
     os.system(f"rm -rf {save_folder}")
 
-def test_single():
-    save_folder = "./tests/downloaded/ERR1551967"
-    download_accession("ERR1551967", 1, save_folder, False)
-    assert _same_dirs(save_folder, "./tests/expected_single/ERR1551967")
-    os.system(f"rm -rf {save_folder}")
 
 def test_parse():
     with open("tmp.csv", "w") as f:
@@ -85,6 +90,13 @@ def test_parse():
         f.write('SRR1655192,WGS,187,97029754,PRJNA267549,SAMN03196960,Pathogen.cl,70061188,UNIVERSITY OF WASHINGTON,UW clinical laboratory,public,"fastq,sra","gs,ncbi,s3","gs.US,ncbi.public,s3.us-east-1",SRX761658,USA,North America,USA: WA,missing,Homo sapiens,Illumina HiSeq 2000,missing,missing,10_ECLO,PAIRED,RANDOM,GENOMIC,Enterobacter cloacae,ILLUMINA,2015-07-07T00:00:00Z,10_ECLO,SRP049998,10_ECLO,,,,,\n')
     data = _read_file("tmp.csv")
     assert dict(data) == {'PRJNA267549': ['SRR1655192']}
+    os.system("rm tmp.csv")
+    
+def test_emptyline():
+    normal = _read_file('./tests/SraRunTable.txt')
+    emptyline = _read_file('./tests/SraRunTable_emptyline.txt')
+    assert normal == emptyline 
+
     
 if __name__=="__main__":
     test_parse()
