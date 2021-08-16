@@ -7,6 +7,7 @@ from collections import defaultdict
 import hashlib
 
 
+# https://stackoverflow.com/questions/3431825/generating-an-md5-checksum-of-a-file
 def hash_bytestr_iter(bytesiter, hasher, ashexstr=False):
     for block in bytesiter:
         hasher.update(block)
