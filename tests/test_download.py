@@ -4,6 +4,40 @@ import filecmp
 import os
 import csv
 from collections import defaultdict
+import hashlib
+
+
+def hash_bytestr_iter(bytesiter, hasher, ashexstr=False):
+    for block in bytesiter:
+        hasher.update(block)
+    return hasher.hexdigest() if ashexstr else hasher.digest()
+
+
+def file_as_blockiter(afile, blocksize=65536):
+    with afile:
+        block = afile.read(blocksize)
+        while len(block) > 0:
+            yield block
+            block = afile.read(blocksize)
+
+
+def get_fastq_hashes(path):
+    for dirpath, dirnames, filenames in os.walk(path):
+        for filename in filenames:
+
+            if filename.endswith(".fastq"):
+
+                # Get full filepath
+                full_path = os.path.join(dirpath, filename)
+                # Create name for hash
+                hash_name = filename.split('.')[0] + '.' + filename.split('.')[1] + ".md5"
+                # Get saving directory
+                abs_dir = os.path.dirname(os.path.abspath(full_path))
+                # Write hash
+                with open(os.path.join(abs_dir, hash_name), "wb") as f:
+                    f.write(hash_bytestr_iter(file_as_blockiter(open(os.path.abspath(full_path), 'rb')), hashlib.md5()))
+                # Remove original file
+                os.remove(full_path)
 
 
 def _same_dirs(a, b):
@@ -38,6 +72,7 @@ def _same_dirs(a, b):
 def test_single():
     save_folder = "./tests/downloaded/ERR1551967"
     download_accession("ERR1551967", 1, save_folder, False)
+    get_fastq_hashes(save_folder)
     assert _same_dirs(save_folder, "./tests/expected_single/ERR1551967")
     os.system(f"rm -rf {save_folder}")
 
@@ -56,7 +91,8 @@ def test_from_file():
     for study_name, n_samples in study_stats.items():
         tmp_save_folder = f'{save_folder}/{study_name}'
         copy2('./tests/SraRunTable.txt', f'{tmp_save_folder}')
-
+    
+    get_fastq_hashes(save_folder)
     assert _same_dirs(save_folder, "./tests/expected")
     os.system(f"rm -rf {save_folder}")
 
