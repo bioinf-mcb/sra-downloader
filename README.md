@@ -1,5 +1,5 @@
 # sra-downloader
-A script for batch-downloading and automatic compression of data from NCBI Sequence Read Archive. Built on SRA-Toolkit, which ensures broadband speed during the download 
+A script for batch-downloading and automatic compression of data from NCBI Sequence Read Archive. Built on SRA-Toolkit, which ensures high throughput during the download.
 
 Features:
  - Batch downloading reads for whole studies
@@ -44,7 +44,7 @@ optional arguments:
                         a directory that the files will be saved to. (default: ./downloaded)
   --uncompressed [UNCOMPRESSED]
                         if present, the files will not be compressed. (default: False)
-  --cores [CORES]       Cores used for multithreaded compression. (default is the number of online processors, or 8 if unknown)
+  --cores [CORES]       Cores used for parallel compression. (default is the number of online processors, or 8 if unknown)
 ```
 
 ### Examples
