@@ -8,7 +8,7 @@ Features:
  - Detecting which runs have been already downloaded
 
 ## Requirements
-- python >= 3.6
+- python >= 3.7
 - sra-toolkit >= 2.9.6
 - pigz 
 
