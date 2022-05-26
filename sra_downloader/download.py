@@ -36,9 +36,9 @@ def _load_absent(filepath):
     return res
 
 def _call(command):
-    res = subprocess.run(command, shell=True, capture_output=True)
-    if res.stderr.decode():
-        logger.error(res.stderr.decode())
+    res = subprocess.run(command, shell=True, capture_output=True, universal_newlines=True)
+    if res.stderr:
+        logger.error(res.stderr)
     return res
 
 def download_accession(accession, cores, save_folder="./downloaded", compress=True):
@@ -60,7 +60,7 @@ def download_accession(accession, cores, save_folder="./downloaded", compress=Tr
 
     fasterq_dump = "fasterq-dump {0}.sra -O {1}".format(fname, save_folder)
     res = _call(fasterq_dump)
-    if 'invalid accession' in res.stderr.decode():
+    if 'invalid accession' in res.stderr:
         logger.warning('Accession {0} not found'.format(accession))
         raise FileNotFoundError 
 
