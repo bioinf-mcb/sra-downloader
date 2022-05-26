@@ -1,4 +1,4 @@
-# sra-downloader
+# SRADownloader
 A script for batch-downloading and automatic compression of data from NCBI Sequence Read Archive. Built on SRA-Toolkit, which ensures high throughput during the download.
 
 Features:
@@ -6,6 +6,8 @@ Features:
  - Downloading SRAs using either accession IDs or NCBI generated files
  - Organizing sequences by projects that they come from
  - Detecting which runs have been already downloaded
+
+![](https://i.imgur.com/w9YcJix.png)
 
 ## Requirements
 - python >= 3.7
