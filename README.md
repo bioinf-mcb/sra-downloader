@@ -1,13 +1,14 @@
 # sra-downloader
-A script for batch-downloading and automatic compression of data from NCBI Sequence Read Archive. Built on SRA-Toolkit.
+A script for batch-downloading and automatic compression of data from NCBI Sequence Read Archive. Built on SRA-Toolkit, which ensures high throughput during the download.
 
 Features:
+ - Batch downloading reads for whole studies
  - Downloading SRAs using either accession IDs or NCBI generated files
  - Organizing sequences by projects that they come from
  - Detecting which runs have been already downloaded
 
 ## Requirements
-- python >= 3.6
+- python >= 3.7
 - sra-toolkit >= 2.9.6
 - pigz 
 
@@ -43,7 +44,7 @@ optional arguments:
                         a directory that the files will be saved to. (default: ./downloaded)
   --uncompressed [UNCOMPRESSED]
                         if present, the files will not be compressed. (default: False)
-  --cores [CORES]       Cores used for compression. (default is the number of online processors, or 8 if unknown)
+  --cores [CORES]       Cores used for parallel compression. (default is the number of online processors, or 8 if unknown)
 ```
 
 ### Examples

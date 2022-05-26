@@ -52,7 +52,7 @@ def download_accession(accession, cores, save_folder="./downloaded", compress=Tr
 
     fname = os.path.join(save_folder, accession)
 
-    prefetch = "prefetch --max-size 100G " + accession + " -o " + fname + ".sra"
+    prefetch = "prefetch --max-size 100G --type fastq " + accession + " -o " + fname + ".sra"
     results = _call(prefetch)
     if "no data" in str(results.stderr):
         logger.error("Accession {0} not found".format(accession))
