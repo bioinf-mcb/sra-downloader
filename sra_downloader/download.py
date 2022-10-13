@@ -52,19 +52,19 @@ def download_accession(accession, cores, save_folder="./downloaded", compress=Tr
 
     fname = os.path.join(save_folder, accession)
 
-    prefetch = "prefetch --max-size 100G --type fastq " + accession + " -o " + fname + ".sra"
+    prefetch = "prefetch --max-size 100G --type fastq " + accession + " -o " + fname
     results = _call(prefetch)
     if "no data" in str(results.stderr):
         logger.error("Accession {0} not found".format(accession))
         raise FileNotFoundError
 
-    fasterq_dump = "fasterq-dump {0}.sra -O {1}".format(fname, save_folder)
+    fasterq_dump = "fasterq-dump {0} -O {1}".format(fname, save_folder)
     res = _call(fasterq_dump)
     if 'invalid accession' in res.stderr.decode():
         logger.warning('Accession {0} not found'.format(accession))
         raise FileNotFoundError 
 
-    os.remove(fname + '.sra')
+    os.remove(fname)
     if compress:
         for fname in glob.glob("{0}/{1}*.fastq".format(save_folder, accession)):
             compress = 'pigz '
@@ -152,7 +152,7 @@ def _read_file(fname):
 
 if __name__ == "__main__":  
     # Change this to your download location
-    save_folder = "./downloaded"
+    save_folder = "./"
 
     # input path to your SraRunTable.txt from the study
     # metadata = pd.read_csv('SraRunTable.txt')
